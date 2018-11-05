@@ -20,7 +20,7 @@ Files.
 ## Commands
 
 #### Command Interface
-```
+```cs
 public interface Console.Command : Object {
     public abstract string get_name ();
     public abstract async void execute ();
@@ -34,7 +34,7 @@ public interface Console.Command : Object {
 Is an abstract class that handle all the fuzz to create a basic class
 basically you should only override execute and get_name methods and your ready to go
 
-```
+```cs
 public class TestCommand : Console.BaseCommand {
     public override string get_name () {
         return "Test";
@@ -49,7 +49,7 @@ public class TestCommand : Console.BaseCommand {
 
 #### ClousureCommand
 If your command is simple you can use just a closure using ClosureCommand (nameOfCommand, closure) and it's possible to append details with with_description (string dsc) method
-```
+```cs
 commands["quick"] = new Console.ClosureCommand ("quick",
         (request) => print (@"Testing closure command\n"))
         .with_description ("Tests a closure based Command");
@@ -59,7 +59,7 @@ commands["quick"] = new Console.ClosureCommand ("quick",
 Commands service is a container that holds a list of commands and execute commands
 
 #### Adding commands
-```
+```cs
 var commands = new Console.Commands ();
 // You can use add method
 commands.add ("hello", new HelloCommand ());
@@ -68,14 +68,14 @@ commands["hello"] = new HelloCommand ();
 ```
 
 #### Removing commands
-```
+```cs
 commands.remove ("hello);
 ```
 
 #### Parsing args and executing
 
 You can parse the args returning a Request by
-```
+```cs
 public static int main(string[] args) {
     return 0;
     var commands = new Console.Commands ();
@@ -83,11 +83,11 @@ public static int main(string[] args) {
 }
 ```
 And execute requests with
-```
+```cs
 commands.execute_request (request);
 ```
 It's also possible to parse and execute in one shot with
-```
+```cs
 public static int main(string[] args) {
     return 0;
     var commands = new Console.Commands ();
