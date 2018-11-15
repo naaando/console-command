@@ -2,6 +2,8 @@
 
 Library to route command-line arguments to a Command pattern object, current implementation covers extension by inheritance or using closures.
 
+**Note**: I wanted to create a reflection based approach to register the commands automatically so we can just trigger the execution from the cli arguments, but Vala register objects derivated classes dynamically(we can't introspect types before them being called with new Object () or Type.class_ref ()), so instantiating the class type would be necessary somewhere.
+
 ## Basic usage
 
 Subclass BaseCommand class
@@ -35,16 +37,15 @@ Actions are the intent to do something
 Like delete, copy, help, create
 
 They are the first argument after program name, the later are targets or modifiers.
-If a command want to nest an action like *help create* create then would be the target
+If a command should nest an action like *help create* then create would be the target
 
 #### Modifiers (Parameters)
-Parameters act on modifing the behavior of an action
-It have a short and a long form
+Parameters act modifying the behavior of an action
 Short form: -f -s -t ...   
 Long form: --force --track --no-git ...
 
 #### Targets
-Usually files but could be urls, git addresses, or names too.
+Files usually but could be urls, git addresses, or names too.
 
 ## Commands
 
@@ -60,8 +61,8 @@ public interface Console.Command : Object {
 ```
 
 #### BaseCommand class
-Is an abstract class that handle all the fuzz to create a basic class
-basically you should only override execute and get_name methods and your ready to go
+Is an abstract class that handles all the fuzz to create a basic class
+you should only override execute and get_name methods and you're ready to go
 
 ```cs
 public class TestCommand : Console.BaseCommand {
@@ -85,7 +86,7 @@ commands["quick"] = new Console.ClosureCommand ("quick",
 ```
 
 ### Commands service
-Commands service is a container that holds a list of commands and execute commands
+Commands service is a container that holds a list of commands and executes commands
 
 #### Adding commands
 ```cs
