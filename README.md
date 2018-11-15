@@ -2,20 +2,49 @@
 
 Library to route command-line arguments to a Command pattern object, current implementation covers extension by inheritance or using closures.
 
+## Basic usage
+
+Subclass BaseCommand class
+
+```cs
+public class MyCommand : Console.BaseCommand {
+    public string get_name () {
+        return "My command";
+    }
+
+    public async void execute () {
+        print (@"Aha!\n");
+    }
+}
+```
+
+Use Commands service to store your commands and parse arguments on main
+```cs
+public static int main(string[] args) {
+    var commands = new Console.Commands ();
+    commands["something"] = new MyCommand ();
+    commands.execute_with_args (args);
+    return 0;
+}
+```
+
 ## Requests
-Console requests parse arguments to
+Console requests parse arguments to *Actions*, *modifiers* and *targets*
 #### Actions
 Actions are the intent to do something
 Like delete, copy, help, create
 
+They are the first argument after program name, the later are targets or modifiers.
+If a command want to nest an action like *help create* create then would be the target
+
 #### Modifiers (Parameters)
 Parameters act on modifing the behavior of an action
-It have a short and a long form    
+It have a short and a long form
 Short form: -f -s -t ...   
 Long form: --force --track --no-git ...
 
 #### Targets
-Files.
+Usually files but could be urls, git addresses, or names too.
 
 ## Commands
 
@@ -69,7 +98,7 @@ commands["hello"] = new HelloCommand ();
 
 #### Removing commands
 ```cs
-commands.remove ("hello);
+commands.remove ("hello");
 ```
 
 #### Parsing args and executing
@@ -77,9 +106,9 @@ commands.remove ("hello);
 You can parse the args returning a Request by
 ```cs
 public static int main(string[] args) {
-    return 0;
     var commands = new Console.Commands ();
-    var request = commands.parse_request_from_args ();
+    var request = commands.parse_request_from_args (args);
+    return 0;
 }
 ```
 And execute requests with
@@ -89,10 +118,9 @@ commands.execute_request (request);
 It's also possible to parse and execute in one shot with
 ```cs
 public static int main(string[] args) {
-    return 0;
     var commands = new Console.Commands ();
     commands.execute_with_args (args);
-    // But in this case nothing will happen because there's no command
+    return 0;
 }
 
 ```
