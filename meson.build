@@ -1,4 +1,4 @@
-project ('console-command', 'vala', 'c', version: '0.2')
+project ('console-command', 'vala', 'c', version: '0.3')
 
 subdir('src')
 subdir('tests')
