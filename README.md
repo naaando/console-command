@@ -1,4 +1,4 @@
-# console-command
+# Console commands
 
 Library to route command-line arguments to a Command pattern object, current implementation covers extension by inheritance or using closures.
 
