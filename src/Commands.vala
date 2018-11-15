@@ -1,4 +1,5 @@
 public class Console.Commands : Object, CommandContainer {
+    public string default_command { get; set; default = "help"; }
     Gee.HashMap<string, Command> commands = new Gee.HashMap<string, Command> ();
 
     public new Command get (string name) {
@@ -30,8 +31,8 @@ public class Console.Commands : Object, CommandContainer {
         string? action = actions.length > 0 ? actions[0] : null;
 
         if (action == null || !commands.has_key (action)) {
-            if (commands.has_key ("help")) {
-                commands["help"].execute_sync ();
+            if (commands.has_key (default_command)) {
+                commands[default_command].execute_sync ();
             }
             return;
         }
