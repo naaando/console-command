@@ -10,11 +10,11 @@ Subclass BaseCommand class
 
 ```cs
 public class MyCommand : Console.BaseCommand {
-    public string get_name () {
+    public override string get_name () {
         return "My command";
     }
 
-    public async void execute () {
+    public override async void execute () {
         print (@"Aha!\n");
     }
 }
