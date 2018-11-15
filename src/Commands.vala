@@ -1,5 +1,5 @@
 public class Console.Commands : Object, CommandContainer {
-    public string default_command { get; set; default = "help"; }
+    public Command? default_command { get; set; }
     Gee.HashMap<string, Command> commands = new Gee.HashMap<string, Command> ();
 
     public new Command get (string name) {
@@ -30,21 +30,27 @@ public class Console.Commands : Object, CommandContainer {
         var actions = request.get_actions ();
         string? action = actions.length > 0 ? actions[0] : null;
 
-        if (action == null || !commands.has_key (action)) {
-            if (commands.has_key (default_command)) {
-                commands[default_command].execute_sync ();
-            }
+        Command? cmd = get_command (action);
+        if (cmd == null) {
+            debug ("No input was given, and no help or default command has been set")
             return;
         }
 
-        if (commands.has_key (action)) {
-            var cmd = commands[action];
+        inject_request (request, cmd);
+        cmd.execute_sync ();
+    }
 
-            if (cmd is UseRequest) {
-                (cmd as UseRequest).set_request (request);
-            }
+    Command? get_command (string? action) {
+        if (action == null) {
+            return default_command ?? commands["help"];
+        }
 
-            cmd.execute_sync ();
+        return commands[action] ?? commands["help"] ?? default_command;
+    }
+
+    void inject_request (Request request, Command cmd) {
+        if (cmd is UseRequest) {
+            (cmd as UseRequest).set_request (request);
         }
     }
 }
